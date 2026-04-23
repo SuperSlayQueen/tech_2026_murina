@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: dating_bot_postgres
+    environment:
+      POSTGRES_USER: dating_user
+      POSTGRES_PASSWORD: dating_password
+      POSTGRES_DB: dating_bot
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dating_user -d dating_bot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dating_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: dating_bot_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dating_network
+
+  bot:
+    build: .
+    container_name: dating_bot
+    network_mode: "host"  # <-- ДОБАВЬ ЭТУ СТРОКУ
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://dating_user:dating_password@localhost:5432/dating_bot  # <-- ИЗМЕНИ postgres НА localhost
+      REDIS_HOST: localhost  # <-- ИЗМЕНИ redis НА localhost
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      LOG_LEVEL: INFO
+    volumes:
+      - ./:/app
+    # УБЕРИ networks секцию для bot
+
+networks:
+  dating_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
