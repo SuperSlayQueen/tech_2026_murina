@@ -125,4 +125,14 @@ docker compose exec -T mysql mysql -uroot -proot isolation_lab < sql/00_setup.sq
 
 2) Non-repeatable read
 ![Ardor](images/3.png)
+первое чтение в сессии A (`balance = 100`) до изменения из сессии B
 ![Ardor](images/4.png)
+повторное чтение в той же транзакции A после `COMMIT` в B (`balance = 200`)
+
+3) Phantom read
+![Ardor](images/5.png)
+вторая выборка по тому же условию в A возвращает дополнительную строку после `INSERT` в B
+
+4) Lost update
+![Ardor](images/6.png)
+итоговый `balance = 120`: обновление из одной транзакции перезаписало результат другой
