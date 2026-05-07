@@ -118,6 +118,7 @@ docker compose exec -T mysql mysql -uroot -proot isolation_lab < sql/00_setup.sq
 
 Для каждой аномалии: два окна клиента с шагами A/B и результатом `SELECT` / состоянием таблицы
 
+1) Dirty read
 ![Ardor](images/1.png)
 видно 999 до ROLLBACK в A и 100 после ROLLBACK
 ![Ardor](images/2.png)
