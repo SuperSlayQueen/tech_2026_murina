@@ -1,4 +1,4 @@
-# Dating Bot - Этапы 2-4
+# Dating Bot
 
 Telegram-бот для знакомств с системой анкет, лайков и мэтчей.
 Ссылка на бот - https://t.me/LalaDateBot
