@@ -10,7 +10,7 @@ Telegram-бот для знакомств с системой анкет, лай
 ```bash
 pip install -r requirements.txt
 ```
-### 2. Подними всю инфраструктуру через Docker Compose
+### 2. Поднять всю инфраструктуру через Docker Compose
 
 ```bash
 docker compose up -d --build
